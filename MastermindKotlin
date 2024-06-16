@@ -1,0 +1,35 @@
+def evaluate_guess(secret_code, guess):
+    if len(secret_code) != len(guess):
+        raise ValueError("Secret code and guess must be of the same length")
+    
+    exact_matches = 0
+    partial_matches = 0
+    
+    # Track which positions have been matched
+    matched_secret = [False] * len(secret_code)
+    matched_guess = [False] * len(guess)
+    
+    # First pass: check for exact matches
+    for i in range(len(secret_code)):
+        if secret_code[i] == guess[i]:
+            exact_matches += 1
+            matched_secret[i] = True
+            matched_guess[i] = True
+    
+    # Second pass: check for partial matches
+    for i in range(len(secret_code)):
+        if not matched_guess[i]:  # Skip if it's already an exact match
+            for j in range(len(secret_code)):
+                if not matched_secret[j] and secret_code[j] == guess[i]:
+                    partial_matches += 1
+                    matched_secret[j] = True
+                    break
+    
+    return exact_matches, partial_matches
+
+# Example usage
+secret_code = "ABCD"
+guess = "AECB"
+result = evaluate_guess(secret_code, guess)
+print("Exact matches:", result[0])
+print("Partial matches:", result[1])
